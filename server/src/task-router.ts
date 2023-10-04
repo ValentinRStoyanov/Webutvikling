@@ -33,11 +33,32 @@ router.post('/tasks', (request, response) => {
   else response.status(400).send('Missing task title');
 });
 
+
+router.put('/tasks', (request, response) => {
+  const {id,title,done} = request.body;
+  
+  if( 
+  //Bruker strikt type checking for å sjekke riktig input
+   typeof id === 'number' &&
+   typeof title === 'string'  && 
+   title.length > 0 && 
+   typeof done === "boolean"
+   ){
+    taskService
+    .update({id,title,done})
+    .then(() => response.send())
+    .catch((error) => response.status(500).send(error));
+  } else {
+    response.status(400).send('Not all properties needed are included.');
+  }
+});
+
 router.delete('/tasks/:id', (request, response) => {
   taskService
     .delete(Number(request.params.id))
     .then((_result) => response.send())
     .catch((error) => response.status(500).send(error));
 });
+
 
 export default router;

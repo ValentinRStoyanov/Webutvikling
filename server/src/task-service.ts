@@ -62,6 +62,16 @@ class TaskService {
       });
     });
   }
+
+  update(task: Task) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query('UPDATE Tasks SET title=?,done=? WHERE id=?', [task.title, task.done, task.id], (error, results: ResultSetHeader) => {
+        if(error) return reject(error);
+        if(results.affectedRows == 0) reject(new Error('No task updated'));
+      })
+      resolve()
+    })
+  }
 }
 
 const taskService = new TaskService();

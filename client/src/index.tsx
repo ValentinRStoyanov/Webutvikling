@@ -10,11 +10,32 @@ class TaskList extends Component {
   render() {
     return (
       <Card title="Tasks">
+         <Row>
+          <Column width={4}>
+            <b>Task</b>
+          </Column>
+          <Column width={1}>
+            <b>Done</b>
+          </Column>
+        </Row>
         {this.tasks.map((task) => (
           <Row key={task.id}>
-            <Column>{task.title}</Column>
-          </Row>
-        ))}
+            <Column width={4}>{task.title}</Column> 
+            <Column width={1}>
+              <Form.Checkbox  checked={task.done} 
+              onChange={()=> taskService
+              .update({id: task.id, title: task.title, done: !task.done})
+              .then(() => this.mounted())}>
+              </Form.Checkbox>
+            </Column>    
+          <Column width={1}>
+          <Button.Danger  onClick={() => taskService
+          .delete(task.id)
+          .then(()=> this.mounted())}>x
+          </Button.Danger>
+          </Column>
+
+          </Row>))}
       </Card>
     );
   }
@@ -57,6 +78,8 @@ class TaskNew extends Component {
     );
   }
 }
+
+
 
 let root = document.getElementById('root');
 if (root)
